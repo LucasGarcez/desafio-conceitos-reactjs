@@ -11,7 +11,7 @@ function App() {
     api.get('repositories').then(response => {
       setRepositories(response.data);
     })
-  }, [repositories])
+  }, [])
 
 
   async function handleAddRepository() {
@@ -30,11 +30,9 @@ function App() {
 
   async function handleRemoveRepository(id) {
     const response = await api.delete(`repositories/${id}`);
-    if (response.statusText.startsWith('20')) {
-      let repositoriesUpdated = [...repositories];
-      repositoriesUpdated = repositoriesUpdated.filter(repository => repository.id !== id);
-      setRepositories(repositoriesUpdated);
-    }
+    let repositoriesUpdated = [...repositories];
+    repositoriesUpdated = repositoriesUpdated.filter(repository => repository.id !== id);
+    setRepositories(repositoriesUpdated);
   }
 
   return (
@@ -42,7 +40,7 @@ function App() {
       <ul data-testid="repository-list">
 
         {repositories.map(repository => (
-          <li>
+          <li key={repository.id}>
             {repository.title}
             <button onClick={() => handleRemoveRepository(repository.id)}>
               Remover
